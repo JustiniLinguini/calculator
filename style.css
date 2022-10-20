@@ -19,10 +19,16 @@ body{
 #screen{
     width: 225px;
     height: 50px;
+    display: flex;
     background-color: white;
+    border: solid 2px;
+    border-color: grey;
     border-radius: 25px;
     margin-top: 12.5px;
     margin-bottom: auto;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 
 } 
 
