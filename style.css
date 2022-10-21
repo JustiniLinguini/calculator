@@ -1,3 +1,9 @@
+*{
+    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;    
+    font-weight: 600;
+}
+
 body{
     height: 100vh;
     background-image: linear-gradient(to right, #22223B , #4A4E69);
@@ -15,6 +21,7 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border: solid 2px grey;
 }
 #screen{
     width: 225px;
@@ -73,11 +80,17 @@ body{
     width: 40px;
     height: 40px;
 }
+.operand:hover{
+    border-color: yellow;
+}
 .operator{
     background-color: #9A8C98;
     border-radius: 40px;
     width: 80px;
     height: 40px;
+}
+.operator:hover{
+    border-color: yellow;
 }
 #reset{
     border-radius: 40px;
@@ -86,10 +99,16 @@ body{
     background-color: #fec89a;
     margin: 10px;
 }
+#reset:hover{
+    border-color: yellow;
+}
 #equals{
     border-radius: 40px;
     width: 200px;
     height: 40px;
     background-color: #fec89a;
     margin: 10px;
+}
+#equals:hover{
+    border-color: yellow;
 }

@@ -1,135 +1,109 @@
-let str = "";
 
 function setHandlers(){
     const buttonSelector = document.querySelectorAll('.button-selector');
     const screen = document.querySelector('#screen');
     const equals = document.querySelector('#equals');
-    const errorArray = [];
-    let i = 0;
-    const handlerArray = []
-
+    let equalsPressed = false;
     buttonSelector.forEach((button) => {
         button.addEventListener('click' , ()=> {
-            screen.textContent = screen.textContent + `${button.id}`
-            errorArray.push(button.id);
-            str = str + button.id;
-            errorHandler(errorArray, i);
-            numArray = listHandler(handlerArray);
-            console.log(numArray);
-            //console.log(ordered(numArray), "order");
-            console.log(str , "string");
-            i++;
+            screen.textContent = screen.textContent + `${button.id}`;
+            buttonString = buttonString + `${button.id}`;
+            let sum = stackHandler(buttonString);
+            console.log(sum);
+            console.log(buttonString, "string");
+
+            if(sum != undefined){
+                screen.textContent = sum + lastChar;
+            }
 
         })
     });
+    equals.addEventListener('click',() =>{
+        let sum = stackHandler(buttonString);
+        equalsPressed = true;
+        let equalsSum = stackHandler(buttonString, equalsPressed);
+        console.log(buttonString, "string e");
 
-    equals.addEventListener('click', () => {
-        const screen = document.querySelector('#screen');
-        screen.textContent = sum(numArray);
+        if(equalsSum != undefined){
+            screen.textContent = equalsSum;
+        }
     })
 
 }
 
-function errorHandler(numList,counter){
+let buttonString = "";
+let stack = [];
 
-    const screen = document.querySelector('#screen');
-    if(numList[0] == "+" || numList[0] == "-" || numList[0] == "*" || numList[0] == "/"){
-        screen.textContent ='ERROR EXPRESSION STARTED WITH OPERATOR';
+function stackHandler(str, equalsPressed){
+    lastChar = str.charAt(str.length -1);
+    let hasOperator = false;
+    if(isOperator(lastChar) == true){
+        hasOperator = true;
+        stack.push(str.slice(0,-1 ));
+        stack.push(lastChar);
+        buttonString = "";
     }
-    if(counter != 0){
-        if(numList.length > 27){
-            screen.textContent ='ERROR TOO MANY DIGITS';
-        }
-        if(numList[counter] == "/" && numList[counter] == numList[counter-1]){
-            screen.textContent ='ERROR TWO OPERATORS IN A ROW';
-        }
-        if(numList[counter] == "+" && numList[counter] == numList[counter-1]){
-            screen.textContent ='ERROR TWO OPERATORS IN A ROW';
-        }
-        if(numList[counter] == "-" && numList[counter] == numList[counter-1]){
-            screen.textContent ='ERROR TWO OPERATORS IN A ROW';
-        }
-        if(numList[counter] == "*" && numList[counter] == numList[counter-1]){
-            screen.textContent ='ERROR TWO OPERATORS IN A ROW';
-        }
+    if(stack.length > 3){
+        stack.pop();
+        console.log(stack, 'stack');
+        sum = sumStack(stack);
+        stack = [];
+        stack.push(sum);
+        stack.push(lastChar);
+        buttonString = "";
+        return sum;
+    }
+
+    if(equalsPressed == true){
+        console.log("i got pressed");
+        stack.push(str);
+        sum = sumStack(stack)
+        stack = [];
+        stack.shift();
+        stack.push(sum)
+        console.log(stack, "e")
+        buttonString = "";
+        equalsPressed = false;
+        return sum;
     }
 }
 
-function listHandler(numArray){
+//takes an array with 3 items, items should include one operator and 2 operands
+function sumStack(equation){
 
-    if(str.charAt(str.length-1) == "+"){
-        str = str.slice(0, -1);
-        numArray.push(str)
-        numArray.push("+")
-        str = "";
-    }
-    if(str.charAt(str.length-1) == "-"){
-        str = str.slice(0, -1);
-        numArray.push(str)
-        numArray.push("-")
-        str = "";
-    }
-    if(str.charAt(str.length-1) == "/"){
-        str = str.slice(0, -1);
-        numArray.push(str)
-        numArray.push("/")
-        str = "";
-    }
-    if(str.charAt(str.length-1) == "*"){
-        str = str.slice(0, -1);
-        numArray.push(str)
-        numArray.push("*")
-        str = "";
-    }
+    if(equation.length == 3){
+        let operand1 = parseInt(equation[0]);
+        let operand2 = parseInt(equation[2]);
+        let operator = equation[1];
 
-    return numArray;
-}
-
-function sum(numArray){
-    let sum;
-    let numHolder = [];
-    numArray.push(str);
-
-    for(let i = 0; i < numArray.length; i++){
-
-        let firstOperand = parseInt(numArray[i]);
-        let secondOperand = parseInt(numArray[i + 2]);
-        let operator = numArray[i + 1];
-    
-        if(operator == "*"){
-            sum = firstOperand * secondOperand;
-            numHolder.push(sum)
-        }
-        if(operator == "/"){
-            sum = firstOperand / secondOperand;
-            numHolder.push(sum)
-        } else {
-            continue;
-        }
-    }
-    for(let i = 0; i < numArray.length; i++){
-
-        let firstOperand = parseInt(numArray[0]);
-        let secondOperand = parseInt(numArray[2]);
-        let operator = numArray[1];
-    
         if(operator == "+"){
-            sum = firstOperand + secondOperand;
-            numHolder.push(sum)
-            numArray.splice(3);
+            return operand1 + operand2;
         }
         if(operator == "-"){
-            sum = firstOperand - secondOperand;
-            numHolder.push(sum)
-            numArray.splice(3);
-
-        } else {
-            numArray.splice(3);
-            continue;
+            return operand1 - operand2;
+        }
+        if(operator == "*"){
+            return operand1 * operand2;
+        }
+        if(operator == "/"){
+            return operand1 / operand2;
+        }
+        else{
+            return "invalid operator";
         }
     }
+}
 
-    return numHolder;
+function isOperator(char){
+
+    if(char == "+" ||  char == "-" || char == "*" || char == "/"){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function inputHandler(str){
     
 }
 setHandlers();
