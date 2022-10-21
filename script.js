@@ -9,8 +9,7 @@ function setHandlers(){
             screen.textContent = screen.textContent + `${button.id}`;
             buttonString = buttonString + `${button.id}`;
             let sum = stackHandler(buttonString);
-            console.log(sum);
-            console.log(buttonString, "string");
+            console.log(buttonString, "input");
 
             if(sum != undefined){
                 screen.textContent = sum + lastChar;
@@ -19,9 +18,7 @@ function setHandlers(){
         })
     });
     equals.addEventListener('click',() =>{
-        let sum = stackHandler(buttonString);
-        equalsPressed = true;
-        let equalsSum = stackHandler(buttonString, equalsPressed);
+        let equalsSum = stackHandler(buttonString, true);
         console.log(buttonString, "string e");
 
         if(equalsSum != undefined){
@@ -34,22 +31,25 @@ function setHandlers(){
 let buttonString = "";
 let stack = [];
 
-function stackHandler(str, equalsPressed){
+function stackHandler(str, equalsPressed = false){
     lastChar = str.charAt(str.length -1);
     let hasOperator = false;
+    console.log(stack, 'stack');
     if(isOperator(lastChar) == true){
         hasOperator = true;
-        stack.push(str.slice(0,-1 ));
+        if(str.length > 1){
+            stack.push(str.slice(0,-1 ));
+        }
         stack.push(lastChar);
         buttonString = "";
     }
     if(stack.length > 3){
         stack.pop();
-        console.log(stack, 'stack');
         sum = sumStack(stack);
         stack = [];
         stack.push(sum);
         stack.push(lastChar);
+        console.log('STACK = ' , stack)
         buttonString = "";
         return sum;
     }
@@ -96,11 +96,7 @@ function sumStack(equation){
 
 function isOperator(char){
 
-    if(char == "+" ||  char == "-" || char == "*" || char == "/"){
-        return true;
-    } else {
-        return false;
-    }
+    return char == "+" || char == "-" || char == "*" || char == "/";
 }
 
 function inputHandler(str){
