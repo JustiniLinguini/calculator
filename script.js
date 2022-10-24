@@ -3,42 +3,34 @@ let operator = "";
 let operand = "";
 
 
-function setHandlers(){
+setHandlers = () => {
     const buttonSelector = document.querySelectorAll('.button-selector');
-    const screen = document.querySelector('#screen');
     const equals = document.querySelector('#equals');
     const backspace = document.querySelector('#backspace');
 
     buttonSelector.forEach((button) => {
         button.addEventListener('click' , () => {
             calc(button.id);
-            screen.textContent = `operand: ${operand} operator:${operator} display: ${display}`;
+            screenRefresh();
         })
     });
 
     equals.addEventListener('click', () => { 
 
         if(operator != "" && operand != "" && display != ""){
-            let result = eval(operand, operator, display)
-            operand = result;
-            operator = "";
-            display = "";
-            lastChar = "";
-            screen.textContent = `operand: ${operand} operator:${operator} display: ${display}`;
+            evalAndClear();
+            screenRefresh();
         } else {
-            screen.textContent = `operand: ${operand} operator:${operator} display: ${display}`;
+            screenRefresh();
         }
     });
 
     backspace.addEventListener('click', () => {
         display = display.slice(0, -1);
-        screen.textContent = `operand: ${operand} operator:${operator} display: ${display}`;
         lastChar = display.charAt(display.length-1);
+        screenRefresh();
     })
 }
-
-
-isOperator = char => char == "+" || char == "-" || char == "*" || char == "/";
 
 calc = (buttonId) => { 
     if(buttonId != 'backspace'){
@@ -47,11 +39,7 @@ calc = (buttonId) => {
     lastChar = display.charAt(display.length-1);
 
     if(isOperator(lastChar) == true && operator != ""){
-        let result = eval(operand, operator, display)
-        operand = result;
-        operator = lastChar;
-        display = "";
-        lastChar = "";
+        evalAndClear();
     }
 
     if(isOperator(lastChar) == true){
@@ -87,5 +75,21 @@ eval = (operand, operator, display) => {
     }
 
 }
+
+screenRefresh = () =>{
+    const screen = document.querySelector('#screen');
+    screen.textContent = `operand: ${operand} operator:${operator} display: ${display}`;
+}
+
+evalAndClear = () =>{
+    let result = eval(operand, operator, display)
+    operand = result;
+    operator = "";
+    display = "";
+    lastChar = "";
+}
+
+isOperator = char => char == "+" || char == "-" || char == "*" || char == "/";
+
 
 setHandlers();
